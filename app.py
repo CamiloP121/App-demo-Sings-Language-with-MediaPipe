@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, File, UploadFile, Form
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from modules.backend import utils
 
 # Crete app
 app = FastAPI()
@@ -23,7 +24,8 @@ def upload_images(request: Request):
     return templates.TemplateResponse("capture.html", {"request": request, "title": capture})
 
 @app.post("/semillIAS_sing/upload_images")
-def upload_images(request: Request, url_image: str = Form(...)):
+async def upload_images(request: Request, url_image: str = Form(...)):
     capture = 'Exitosa!'
-    print(capture, url_image)
+    print(capture, type(url_image))
+    utils.base64toimage(url_image)
     return templates.TemplateResponse("capture.html", {"request": request, "title": capture})

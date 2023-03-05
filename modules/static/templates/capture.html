@@ -23,7 +23,7 @@
     <!— Draw image -->
     <canvas id="canvas" width="640" height="480"></canvas> 
     <form method="post">
-        <input file id="url_image" name="url_image" type="hidden"/>     
+        <input type="hidden" file id="url_image" name="url_image" value="Defecto"/>     
         <input type="submit">
     </form>
     <h1>{{capure}}</h1>
@@ -60,7 +60,6 @@ try {
 function handleSuccess(stream) {
     window.stream = stream;
     video.srcObject = stream;
-    document.getElementById("url_image").setAttribute('value',video);
     }
 // Load init
 init();
@@ -68,6 +67,8 @@ init();
 var context = canvas.getContext('2d');
     snap.addEventListener("click", function() {
     context.drawImage(video, 0, 0, 640, 480);
+    const dataURL = canvas.toDataURL();
+    document.getElementById("url_image").setAttribute('value', dataURL);
     });
 
 </script>
