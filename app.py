@@ -17,6 +17,6 @@ async def home(request: Request, id:str):
         return templates.TemplateResponse("home.html",{"request": request, "title": title})
 
 
-@app.post("/semillIAS_sing/")
+@app.post("/semillIAS_sing/upload_images")
 async def create_upload_file(file: UploadFile):
     return {"filename": file.filename}
