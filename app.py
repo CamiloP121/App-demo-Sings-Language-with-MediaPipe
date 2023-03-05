@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, File, UploadFile
+from fastapi import FastAPI, Request, File, UploadFile, Form
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -10,13 +10,20 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="modules/static"), name="static")
 templates = Jinja2Templates(directory="modules/static/templates")
 
-@app.get("/semillIAS_sing/{id}", response_class=HTMLResponse)
-async def home(request: Request, id:str):
-    if id == 'home':
-        title = 'Demo app: Signs'
-        return templates.TemplateResponse("home.html",{"request": request, "title": title})
+# Home page
+@app.get("/semillIAS_sing/home")
+def home(request: Request):
+    title = 'Demo app: Signs'
+    return templates.TemplateResponse("home.html",{"request": request, "title": title})
 
+# Page capture image
+@app.get("/semillIAS_sing/upload_images")
+def upload_images(request: Request):
+    capture = 'Esperando imagen de la mano'
+    return templates.TemplateResponse("capture.html", {"request": request, "title": capture})
 
 @app.post("/semillIAS_sing/upload_images")
-async def create_upload_file(file: UploadFile):
-    return {"filename": file.filename}
+def upload_images(request: Request, url_image: str = Form(...)):
+    capture = 'Exitosa!'
+    print(capture, url_image)
+    return templates.TemplateResponse("capture.html", {"request": request, "title": capture})
