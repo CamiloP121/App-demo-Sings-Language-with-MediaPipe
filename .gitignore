@@ -1,0 +1,6 @@
+# Ignore directories to github repositories
+
+test/
+
+
+temp/
