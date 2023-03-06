@@ -1,6 +1,7 @@
 import base64
 import numpy as np
 from modules.backend.mediapipe import hands_detect
+import cv2 as cv
 
 def base64toimage(img_data: str, save:bool = True):
     '''
@@ -16,9 +17,7 @@ def base64toimage(img_data: str, save:bool = True):
         with open('temp/image.jpg', 'wb') as file:
             file.write(image)
 
-    return image
-
-def mp_apply(image:np.array, plot:bool = True):
+def mp_apply(plot:bool = True):
     '''
     Funcion use Mediapipe Google detected hands
     ----------------------------------------------------------------
@@ -26,6 +25,7 @@ def mp_apply(image:np.array, plot:bool = True):
     image (np.array): image
     plot (bool, optional): whether to plot the image or not. Defaults to True.
     '''
+    image = cv.imread('temp/image.jpg')
     hands_detect(image, plot=plot)
 
 if __name__ == '__main__':

@@ -11,8 +11,6 @@ def plot_image(image:np.ndarray,name_window:str):
     image (np.ndarray): image to plot
     name_window (str): window name
     '''
-    plt.imshow(image)
-    plt.show()
     # show the image, provide window name first
     cv.imshow(name_window, image)
     # add wait key. window waits until user presses a key
@@ -29,7 +27,41 @@ def hands_detect(image:np.ndarray,plot:bool):
     '''
     # Crate mp-hands model detection
     mp_drawing = mp.solutions.drawing_utils
-    mp_hands = mp.solutions.hands.Hands()
+    mp_hands = mp.solutions.hands
+    
+    # Image original -> image
+    if plot:
+        plot_image(image,name_window='original image')
+
+    # Image draw results -> image_dw
+    ## Flip image and copy
+    image_dw = image.copy()
+    image_dw = cv.flip(image_dw, 1)
+
+    with mp_hands.Hands(
+      static_image_mode=False,
+      max_num_hands=1,
+      min_detection_confidence=0.5) as hands:
+      # DImnesiones (Relebant for the extraction of stitches)
+      height, width, _ = image.shape
+      # Convert to RGB, neceesary for MediaPipe
+      frame_rgb = cv.cvtColor(image_dw, cv.COLOR_BGR2RGB)
+      # Model results
+      results = hands.process(frame_rgb)
+      if results.multi_hand_landmarks is not None:
+          # Draw hands
+          if plot:
+            for hand_landmarks in results.multi_hand_landmarks:
+                mp_drawing.draw_landmarks(
+                        image_dw, hand_landmarks, mp_hands.HAND_CONNECTIONS,mp_drawing.DrawingSpec(color=(255,255,0)))
+            plot_image(image_dw, name_window='Result MediaPipe')
+
+
+    
+    
+    
+    
+    
     
     if plot:
         plot_image(image,name_window='original image')

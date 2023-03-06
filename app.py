@@ -3,18 +3,18 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from modules.backend import utils
+from pathlib import Path
 import logging
 
 # Crete app
 app = FastAPI()
+logging.info('Starting App')
+
+# Create directorys necessary
+Path('temp').mkdir(parents=True, exist_ok=True)
+Path('logs').mkdir(parents=True, exist_ok=True)
 
 # Configure logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler("logs/semillIAS_sing.log")
-handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
 
 # Create templates
 app.mount("/static", StaticFiles(directory="modules/static"), name="static")
@@ -35,11 +35,10 @@ def upload_images(request: Request):
 @app.post("/semillIAS_sing/upload_images")
 async def upload_images(request: Request, url_image: str = Form(...)):
     capture = 'Exitosa!'
-    #logging.DEBUG('Upload image')
     # Load image
-    image = utils.base64toimage(url_image.split(',')[1])
+    utils.base64toimage(url_image.split(',')[1])
     # Mp detect hands
-    utils.mp_apply(image)
+    utils.mp_apply()
 
 
     return templates.TemplateResponse("capture.html", {"request": request, "title": capture})
