@@ -6,3 +6,6 @@ test/
 temp/
 
 __pycahce__/
+**__pycahce__/
+
+logs/
