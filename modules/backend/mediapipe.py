@@ -18,6 +18,16 @@ def plot_image(image:np.ndarray,name_window:str):
     cv.waitKey(0)
     # and finally destroy/close all open windows
     cv.destroyAllWindows()
+
+def check_hands_points(results:object, image:np.ndarray):
+   ''' 
+   Check all hands points exist and stay in the images
+   Args:
+   results (object): list of hands points
+   image (np.ndarray): image to check
+   '''
+   height, wight = image.shape[0], image.shape[1]
+   pass
     
 def hands_detect(image:np.ndarray,plot:bool):
     '''
@@ -56,13 +66,16 @@ def hands_detect(image:np.ndarray,plot:bool):
         lb = 'Se detecto mano'
         # Draw hands
         if plot:
+            
             for hand_landmarks in results.multi_hand_landmarks:
                 mp_drawing.draw_landmarks(
                         image_dw, hand_landmarks, mp_hands.HAND_CONNECTIONS,mp_drawing.DrawingSpec(color=(255,255,0)))
             plot_image(image_dw, name_window='Result MediaPipe')
-
-        with open('temp/mp_results.pkl', 'wb') as file:
+        # Save results mp
+        with open('modules/static/temp/mp_results.pkl', 'wb') as file:
            dill.dump(results, file)
+        # Save drawings mp
+        cv.imwrite('modules/static/temp/image_mp.jpg', image_dw)
     print(lb)
 
 

@@ -15,7 +15,7 @@ def base64toimage(img_data: str, save:bool = True):
     image_as_bytes = str.encode(img_data)  # convert string to bytes
     image = base64.b64decode(image_as_bytes)
     if save:
-        with open('temp/image.jpg', 'wb') as file:
+        with open('modules/static/temp/image.jpg', 'wb') as file:
             file.write(image)
 
 def mp_apply(plot:bool = True):
@@ -26,10 +26,10 @@ def mp_apply(plot:bool = True):
     image (np.array): image
     plot (bool, optional): whether to plot the image or not. Defaults to True.
     '''
-    if os.path.exists('temp/image.jpg'):
-        image = cv.imread('temp/image.jpg')
+    if os.path.exists('modules/static/temp/image.jpg'):
+        image = cv.imread('modules/static/temp/image.jpg')
         hands_detect(image, plot=plot)
-        if not os.path.exists('temp/mp_results.pkl'): return False
+        if not os.path.exists('modules/static/temp/mp_results.pkl'): return False
         else: return True
     else: 
         return False

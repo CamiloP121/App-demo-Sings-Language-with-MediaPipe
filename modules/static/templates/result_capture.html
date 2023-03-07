@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="spa">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result detect hand</title>
+</head>
+<body>
+    <header> 
+        <h1> Resultado detector de manos </h1>
+        
+    </header>
+
+    <div class="img_ori">
+        <h2> Imagen original: </h2>
+        <!— Draw image -->
+        <img src="{{url_for('static', path='temp/image.jpg')}}" alt="Original" width="640" height="480">
+    </div>
+    <div class="img_result">
+        <h2> Imagen resultado: </h2>
+        <!— Draw image -->
+        <img src="{{url_for('static', path='temp/image_mp.jpg')}}" alt="Resultado MediaPipe" width="640" height="480">
+    </div>
+
+    <div class="check">
+        <form method="">
+            <p> ¿Su mano es la {{horientation}} </p>
+            <input type="radio" id="Si" name="h_hand" value="Si"> <label> Si </label><br>
+            <input type="radio" id="No" name="h_hand" value="No"> <label> No </label><br>
+            <input type="submit">
+        </form>
+    </div>
