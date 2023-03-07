@@ -2,8 +2,7 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import numpy as np
 import mediapipe as mp
-import dill
-
+import json
 def plot_image(image:np.ndarray,name_window:str):
     '''
     Plot image
@@ -19,15 +18,48 @@ def plot_image(image:np.ndarray,name_window:str):
     # and finally destroy/close all open windows
     cv.destroyAllWindows()
 
-def check_hands_points(results:object, image:np.ndarray):
+def check_hands_points(x_points:float, y_points:float):
    ''' 
-   Check all hands points exist and stay in the images
+   Check all hands points exist and stay in the images. x_points and y_points < 1.0
+   ----------------------------------------------------------------
    Args:
-   results (object): list of hands points
-   image (np.ndarray): image to check
+   x_points: float
+   y_points: float
+   Returns:
+   True if all hands points in the image
+   False if all hands points not in the image
    '''
-   height, wight = image.shape[0], image.shape[1]
-   pass
+   if x_points > 1.0 or y_points > 1.0:
+      return False
+   if x_points < -1.0 or y_points < -1.0:
+      return False
+   return True
+
+def extract_hand_points(results:object):
+   '''
+   Extract all hands points
+   ----------------------------------------------------------------
+   Args:
+   results (object): Object results mediapipe
+   Returns:
+   hand_points (dict): dict of hands points and other characteristics
+   '''
+   dic_results = {}
+   for hand_landmarks,hand_label in zip(results.multi_hand_landmarks,results.multi_handedness):
+    if hand_label.classification[0].label == 'Left': or_hand = 'Izquierda'
+    else: or_hand = 'Derecha'
+    dic_results['score'] = hand_label.classification[0].score
+    dic_results['orentation_hands'] = or_hand
+    labels = 'WRIST;THUMB_CMC;THUMB_MCP;THUMB_IP;THUMB_TIP;INDEX_FINGER_MCP;INDEX_FINGER_PIP;INDEX_FINGER_DIP;INDEX_FINGER_TIP;MIDDLE_FINGER_MCP;MIDDLE_FINGER_PIP;MIDDLE_FINGER_DIP;MIDDLE_FINGER_TIP;RING_FINGER_MCP;RING_FINGER_PIP;RING_FINGER_DIP;RING_FINGER_TIP;PINKY_MCP;PINKY_PIP;PINKY_DIP;PINKY_TIP'
+    
+    for lb, points in zip(labels.split(';'), hand_landmarks.landmark):
+        if check_hands_points(points.x, points.y):
+           dic_results[lb] = [points.x,points.y,points.z]
+        else: return np.nan, False
+    
+    print('-> Complete extraction')
+    return dic_results, True
+
     
 def hands_detect(image:np.ndarray,plot:bool):
     '''
@@ -64,18 +96,24 @@ def hands_detect(image:np.ndarray,plot:bool):
       results = hands.process(frame_rgb)
       if results.multi_hand_landmarks is not None:
         lb = 'Se detecto mano'
+
+        # Extract results
+        dic_result, flag = extract_hand_points(results)
+        # Save results
+        if flag:
+            with open('modules/static/temp/mp_results.json', 'w') as f:
+                json.dump(dic_result, f, indent=2)
+
         # Draw hands
-        if plot:
-            
-            for hand_landmarks in results.multi_hand_landmarks:
-                mp_drawing.draw_landmarks(
-                        image_dw, hand_landmarks, mp_hands.HAND_CONNECTIONS,mp_drawing.DrawingSpec(color=(255,255,0)))
-            plot_image(image_dw, name_window='Result MediaPipe')
-        # Save results mp
-        with open('modules/static/temp/mp_results.pkl', 'wb') as file:
-           dill.dump(results, file)
+    
+        for hand_landmarks in results.multi_hand_landmarks:
+            mp_drawing.draw_landmarks(
+                    image_dw, hand_landmarks, mp_hands.HAND_CONNECTIONS,mp_drawing.DrawingSpec(color=(255,255,0)))
         # Save drawings mp
         cv.imwrite('modules/static/temp/image_mp.jpg', image_dw)
+        if plot:
+            plot_image(image_dw, name_window='Result MediaPipe')
+        
     print(lb)
 
 

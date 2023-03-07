@@ -16,7 +16,7 @@ Path('temp').mkdir(parents=True, exist_ok=True)
 Path('logs').mkdir(parents=True, exist_ok=True)
 
 # Delete temporary files
-for ext in ['*.jpg','*.txt', '*.pkl']:
+for ext in ['*.jpg','*.txt', '*.pkl','*.json']:
     for file in Path('modules/static/temp').glob(ext):
         file.unlink()
 
@@ -42,15 +42,33 @@ async def upload_images(request: Request, url_image: str = Form(...)):
     # Load image
     utils.base64toimage(url_image.split(',')[1])
     # Mp detect hands
-    flag = utils.mp_apply()
+    flag = utils.mp_apply(False)
     if flag: 
-        redirect_url = URL(request.url_for('result')).include_query_params(msg="")
+        redirect_url = URL(request.url_for('result')).include_query_params(msg="complete extraction")
         return RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)
     else: 
         capture = '**Error** \nNo se encontro mano!'
-        return templates.TemplateResponse("capture.html", {"request": request, "mensagge": capture})
+        return templates.TemplateResponse("capture.html", {"request": request, "message": capture})
 
 @app.get('/semillIAS_sing/result')
 async def result(request: Request):
-    return templates.TemplateResponse("result_capture.html", {"request": request})
+    results = utils.load_mp_results()
+    return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
+                                        "score": str(round(results['score'],3)*100)})
+
+
+@app.post('/semillIAS_sing/result')
+async def result(request: Request, h_hand:str = Form(...)):
+    results = utils.load_mp_results()
+    if h_hand == 'Si':
+        print('Save results')
+        return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
+                                        "score": str(round(results['score'],3)*100), "message": 'La imagen sera cargada. !Muchas gracias por participar!'})
+    elif h_hand == 'No':
+        print('Return to upload image')
+        redirect_url = URL(request.url_for('upload_images'))
+        return RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)
+    else:
+        return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
+                                        "score": str(round(results['score'],3)*100)})
 

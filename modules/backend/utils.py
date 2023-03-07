@@ -3,6 +3,7 @@ import numpy as np
 from modules.backend.mediapipe import hands_detect
 import cv2 as cv
 import os
+import json
 
 def base64toimage(img_data: str, save:bool = True):
     '''
@@ -29,11 +30,22 @@ def mp_apply(plot:bool = True):
     if os.path.exists('modules/static/temp/image.jpg'):
         image = cv.imread('modules/static/temp/image.jpg')
         hands_detect(image, plot=plot)
-        if not os.path.exists('modules/static/temp/mp_results.pkl'): return False
+        if not os.path.exists('modules/static/temp/mp_results.json'): return False
         else: return True
     else: 
         return False
+    
+def load_mp_results():
+    '''
+    Load Mediapipe results
+    ----------------------------------------------------------------
+     Returns:
+     mp_results (object): Mediapipe hands results
+    '''
+    with open('modules/static/temp/mp_results.json', 'r') as file:
+        mp_results = json.load(file)
 
+    return mp_results
 
 if __name__ == '__main__':
     pass    
