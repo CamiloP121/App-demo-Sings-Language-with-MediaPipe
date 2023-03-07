@@ -1,17 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="spa">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" lang="spa">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>capture image</title>
-    
+    <link rel="stylesheet" type="/modules/static/ccs" href="/modules/static/ccs/styles.css">
+    <style>
+        .alert {
+            padding: 20px;
+            background-color: #f44336;
+            color: white;
+        }
+
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .closebtn:hover {
+            color: black;
+        }
+
+
+    </style>
 </head>
 <body>
-    <header> Pestaña de Adqusición de imagen de la mano 
-        <h1>Camara: </h1>
+    <header> 
+        <h1> Pestaña de Adqusición de imagen de la mano </h1>
+        <h2>Camara: </h2>
     </header>
     
+    {% if mensagge %}
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            {{mensagge}}
+        </div>
+    {% endif %}
         
     <div class="video-wrap">
         <video id="video" playsinline autoplay></video>
@@ -24,9 +55,9 @@
     <canvas id="canvas" width="640" height="480"></canvas> 
     <form method="post">
         <input type="hidden" file id="url_image" name="url_image" value="Defecto"/>     
-        <input type="submit">
+        <input type="submit" onclick="confirmFunction()">
     </form>
-    <h1>{{capure}}</h1>
+    
 </body>
 
 <script>
@@ -70,6 +101,14 @@ var context = canvas.getContext('2d');
     const dataURL = canvas.toDataURL();
     document.getElementById("url_image").setAttribute('value', dataURL);
     });
+
+function confirmFunction() {
+    if (confirm("¿Deseas enviar la imagen?") == true) {
+        document.getElementById("ColorChanger").style.backgroundColor = "green";
+    } else {
+        document.getElementById("ColorChanger").style.backgroundColor = "#C0C0C0";
+    }
+}
 
 </script>
 

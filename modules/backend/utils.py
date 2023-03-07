@@ -2,6 +2,7 @@ import base64
 import numpy as np
 from modules.backend.mediapipe import hands_detect
 import cv2 as cv
+import os
 
 def base64toimage(img_data: str, save:bool = True):
     '''
@@ -25,8 +26,14 @@ def mp_apply(plot:bool = True):
     image (np.array): image
     plot (bool, optional): whether to plot the image or not. Defaults to True.
     '''
-    image = cv.imread('temp/image.jpg')
-    hands_detect(image, plot=plot)
+    if os.path.exists('temp/image.jpg'):
+        image = cv.imread('temp/image.jpg')
+        hands_detect(image, plot=plot)
+        if not os.path.exists('temp/mp_results.pkl'): return False
+        else: return True
+    else: 
+        return False
+
 
 if __name__ == '__main__':
     pass    

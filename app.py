@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, File, UploadFile, Form
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from modules.backend import utils
@@ -13,6 +13,11 @@ logging.info('Starting App')
 # Create directorys necessary
 Path('temp').mkdir(parents=True, exist_ok=True)
 Path('logs').mkdir(parents=True, exist_ok=True)
+
+# Delete temporary files
+for ext in ['*.jpg','*.txt', '*.pkl']:
+    for file in Path('temp').glob(ext):
+        file.unlink()
 
 # Configure logging
 
@@ -29,16 +34,16 @@ def home(request: Request):
 # Page capture image
 @app.get("/semillIAS_sing/upload_images")
 def upload_images(request: Request):
-    capture = 'Esperando imagen de la mano'
-    return templates.TemplateResponse("capture.html", {"request": request, "title": capture})
+    return templates.TemplateResponse("capture.html", {"request": request})
 
 @app.post("/semillIAS_sing/upload_images")
 async def upload_images(request: Request, url_image: str = Form(...)):
-    capture = 'Exitosa!'
     # Load image
     utils.base64toimage(url_image.split(',')[1])
     # Mp detect hands
-    utils.mp_apply()
-
-
-    return templates.TemplateResponse("capture.html", {"request": request, "title": capture})
+    flag = utils.mp_apply()
+    if flag: return RedirectResponse(url = f'/semillIAS_sing/result')
+    else: 
+        capture = '**Error** \nNo se encontro mano!'
+        return templates.TemplateResponse("capture.html", {"request": request, "mensagge": capture})
+    # return templates.TemplateResponse("capture.html", {"request": request, "title": capture})
