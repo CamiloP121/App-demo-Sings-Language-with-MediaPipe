@@ -9,3 +9,5 @@ __pycahce__/
 **__pycahce__/
 
 logs/
+
+db/

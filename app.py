@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, File, UploadFile, Form, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from modules.backend import utils
+from modules.backend import utils, db
 from pathlib import Path
 import logging
 from starlette.datastructures import URL
@@ -14,6 +14,9 @@ logging.info('Starting App')
 # Create directorys necessary
 Path('temp').mkdir(parents=True, exist_ok=True)
 Path('logs').mkdir(parents=True, exist_ok=True)
+
+# Create database
+db.create_db()
 
 # Delete temporary files
 for ext in ['*.jpg','*.txt', '*.pkl','*.json']:
@@ -62,6 +65,7 @@ async def result(request: Request, h_hand:str = Form(...)):
     results = utils.load_mp_results()
     if h_hand == 'Si':
         print('Save results')
+        db.insert_db(1,'test')
         return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
                                         "score": str(round(results['score'],3)*100), "message": 'La imagen sera cargada. !Muchas gracias por participar!'})
     elif h_hand == 'No':

@@ -46,16 +46,17 @@ def extract_hand_points(results:object):
    '''
    dic_results = {}
    for hand_landmarks,hand_label in zip(results.multi_hand_landmarks,results.multi_handedness):
-    if hand_label.classification[0].label == 'Left': or_hand = 'Izquierda'
-    else: or_hand = 'Derecha'
-    dic_results['score'] = hand_label.classification[0].score
-    dic_results['orentation_hands'] = or_hand
     labels = 'WRIST;THUMB_CMC;THUMB_MCP;THUMB_IP;THUMB_TIP;INDEX_FINGER_MCP;INDEX_FINGER_PIP;INDEX_FINGER_DIP;INDEX_FINGER_TIP;MIDDLE_FINGER_MCP;MIDDLE_FINGER_PIP;MIDDLE_FINGER_DIP;MIDDLE_FINGER_TIP;RING_FINGER_MCP;RING_FINGER_PIP;RING_FINGER_DIP;RING_FINGER_TIP;PINKY_MCP;PINKY_PIP;PINKY_DIP;PINKY_TIP'
     
     for lb, points in zip(labels.split(';'), hand_landmarks.landmark):
         if check_hands_points(points.x, points.y):
-           dic_results[lb] = [points.x,points.y,points.z]
+           dic_results[lb] = [round(points.x,4),round(points.y,4),round(points.z,4)]
         else: return np.nan, False
+
+    if hand_label.classification[0].label == 'Left': or_hand = 'Izquierda'
+    else: or_hand = 'Derecha'
+    dic_results['score'] = hand_label.classification[0].score
+    dic_results['orentation_hands'] = or_hand
     
     print('-> Complete extraction')
     return dic_results, True
@@ -102,6 +103,8 @@ def hands_detect(image:np.ndarray,plot:bool):
         # Save results
         if flag:
             with open('modules/static/temp/mp_results.json', 'w') as f:
+                json.dump(dic_result, f, indent=2)
+            with open('test/mp_results.json', 'w') as f:
                 json.dump(dic_result, f, indent=2)
 
         # Draw hands
