@@ -14,6 +14,7 @@ logging.info('Starting App')
 # Create directorys necessary
 Path('temp').mkdir(parents=True, exist_ok=True)
 Path('logs').mkdir(parents=True, exist_ok=True)
+Path('modules/backend/db').mkdir(parents=True, exist_ok=True)
 
 # Create database
 db.create_db()
@@ -64,15 +65,24 @@ async def result(request: Request):
 async def result(request: Request, h_hand:str = Form(...)):
     results = utils.load_mp_results()
     if h_hand == 'Si':
-        print('Save results')
-        db.insert_db(1,'test')
-        return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
-                                        "score": str(round(results['score'],3)*100), "message": 'La imagen sera cargada. !Muchas gracias por participar!'})
+        try:
+            image_b64 = utils.imageBase64()
+            results['image'] = image_b64
+            
+            db.insert_db(results)
+            
+            print(results['score'],type(results['score']))
+            return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
+                                        "score": str(round(float(results['score']),3)*100), "message": 'La imagen sera cargada. !Muchas gracias por participar!'})
+        
+        except Exception:
+            return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
+                                        "score": str(round(results['score'],3)*100), "message_raise": 'Error en la carga de datos, intentelo de nuevo'})
     elif h_hand == 'No':
         print('Return to upload image')
         redirect_url = URL(request.url_for('upload_images'))
         return RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)
     else:
         return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
-                                        "score": str(round(results['score'],3)*100)})
+                                        "score": str(round(float(results['score']),3)*100)})
 

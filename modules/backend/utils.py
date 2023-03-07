@@ -18,6 +18,8 @@ def base64toimage(img_data: str, save:bool = True):
     if save:
         with open('modules/static/temp/image.jpg', 'wb') as file:
             file.write(image)
+        with open('modules/static/temp/image.txt', 'w') as file:
+            file.write(img_data)
 
 def mp_apply(plot:bool = True):
     '''
@@ -43,9 +45,21 @@ def load_mp_results():
      mp_results (object): Mediapipe hands results
     '''
     with open('modules/static/temp/mp_results.json', 'r') as file:
-        mp_results = json.load(file)
+        image_as_bytes = json.load(file)
 
-    return mp_results
+    return image_as_bytes
+
+def imageBase64():
+    '''
+    Load image base64
+    ----------------------------------------------------------------
+     Returns:
+     string image base64
+    '''
+    with open('modules/static/temp/image.txt', 'r') as file:
+        img_data = file.read()
+
+    return img_data
 
 if __name__ == '__main__':
     pass    

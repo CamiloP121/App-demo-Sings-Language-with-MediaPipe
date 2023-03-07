@@ -55,7 +55,7 @@ def extract_hand_points(results:object):
 
     if hand_label.classification[0].label == 'Left': or_hand = 'Izquierda'
     else: or_hand = 'Derecha'
-    dic_results['score'] = hand_label.classification[0].score
+    dic_results['score'] = round(hand_label.classification[0].score,4)
     dic_results['orentation_hands'] = or_hand
     
     print('-> Complete extraction')

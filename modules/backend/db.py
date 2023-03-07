@@ -10,7 +10,8 @@ def create_db():
 
     c.execute('''
             CREATE TABLE IF NOT EXISTS mp_result
-            ([id_image] TEXT PRIMARY KEY, 
+            ([id_image] TEXT PRIMARY KEY,
+            [image] TEXT, 
             [WRIST] TEXT,
             [THUMB_CMC] TEXT,
             [THUMB_MCP] TEXT,
@@ -40,12 +41,6 @@ def create_db():
     conn.close()
 
 
-def post_row(conn, tablename, rec):
-    keys = ','.join(rec.keys())
-    question_marks = ','.join(list('?'*len(rec)))
-    values = tuple(rec.values())
-    conn.execute('INSERT INTO '+tablename+' ('+keys+') VALUES ('+question_marks+')', values)
-
 def insert_db(dictionary_result:dict):
     '''
     Function to insert data into database
@@ -55,7 +50,7 @@ def insert_db(dictionary_result:dict):
     '''
     # Select ID
     _,len = download_db()
-    dictionary_result['id_image'] = '_'.join(['id',str(len),mp_results['orentation_hands']])
+    dictionary_result['id_image'] = '_'.join(['id',str(len),dictionary_result['orentation_hands']])
 
     for i, (key, value) in enumerate(dictionary_result.items()):
         dictionary_result[key] = str(value)
@@ -64,9 +59,7 @@ def insert_db(dictionary_result:dict):
 
     conn = sqlite3.connect('modules/db/test_database.db')
     c = conn.cursor()
-    c.execute("INSERT INTO mp_result VALUES (:id_image,:WRIST,:THUMB_CMC,:THUMB_MCP,:THUMB_IP,:THUMB_TIP,:INDEX_FINGER_MCP,:INDEX_FINGER_PIP,:INDEX_FINGER_DIP,:INDEX_FINGER_TIP,:MIDDLE_FINGER_MCP,:MIDDLE_FINGER_PIP,:MIDDLE_FINGER_DIP,:MIDDLE_FINGER_TIP,:RING_FINGER_MCP,:RING_FINGER_PIP,:RING_FINGER_DIP,:RING_FINGER_TIP,:PINKY_MCP,:PINKY_PIP,:PINKY_DIP,:PINKY_TIP,:score,:orentation_hands)", dictionary_result)
-    
-    #post_row(c, 'my_table', row)
+    c.execute("INSERT INTO mp_result VALUES (:id_image,:image,:WRIST,:THUMB_CMC,:THUMB_MCP,:THUMB_IP,:THUMB_TIP,:INDEX_FINGER_MCP,:INDEX_FINGER_PIP,:INDEX_FINGER_DIP,:INDEX_FINGER_TIP,:MIDDLE_FINGER_MCP,:MIDDLE_FINGER_PIP,:MIDDLE_FINGER_DIP,:MIDDLE_FINGER_TIP,:RING_FINGER_MCP,:RING_FINGER_PIP,:RING_FINGER_DIP,:RING_FINGER_TIP,:PINKY_MCP,:PINKY_PIP,:PINKY_DIP,:PINKY_TIP,:score,:orentation_hands)", dictionary_result)
     conn.commit()
     conn.close()
 

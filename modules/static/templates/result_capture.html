@@ -13,6 +13,13 @@
         
     </header>
 
+    {% if message_raise %}
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+        {{message_raise}}
+    </div>
+    {% endif %}
+
     <div class="img_ori">
         <h2> Imagen original: </h2>
         <!— Draw image -->
@@ -38,6 +45,7 @@
             </form>
         </div>
     {% endif %}
+
 
 <script>
     function check() {
