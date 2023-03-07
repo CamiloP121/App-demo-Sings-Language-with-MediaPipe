@@ -6,6 +6,7 @@ from modules.backend import utils, db
 from pathlib import Path
 import logging
 from starlette.datastructures import URL
+import pandas as pd
 
 # Crete app
 app = FastAPI()
@@ -85,4 +86,14 @@ async def result(request: Request, h_hand:str = Form(...)):
     else:
         return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
                                         "score": str(round(float(results['score']),3)*100)})
+
+@app.route("/semillIAS_sing/database_resume")
+def database_resume(request:Request):
+    df,_ = db.download_db()
+
+    tables=[df.to_html(classes='data')]
+    titles=df.columns.values
+    header = True
+    return templates.TemplateResponse("db_resume.html", {"request": request,"tables": tables, "titles": titles})
+
 

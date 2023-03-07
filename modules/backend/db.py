@@ -11,7 +11,8 @@ def create_db():
     c.execute('''
             CREATE TABLE IF NOT EXISTS mp_result
             ([id_image] TEXT PRIMARY KEY,
-            [image] TEXT, 
+            [orentation_hands] TEXT, 
+            [score] TEXT,
             [WRIST] TEXT,
             [THUMB_CMC] TEXT,
             [THUMB_MCP] TEXT,
@@ -33,8 +34,7 @@ def create_db():
             [PINKY_PIP] TEXT,
             [PINKY_DIP] TEXT,
             [PINKY_TIP] TEXT,
-            [score] TEXT,
-            [orentation_hands] TEXT) 
+            [image] TEXT) 
             ''')
     
     conn.commit()
@@ -59,7 +59,7 @@ def insert_db(dictionary_result:dict):
 
     conn = sqlite3.connect('modules/db/test_database.db')
     c = conn.cursor()
-    c.execute("INSERT INTO mp_result VALUES (:id_image,:image,:WRIST,:THUMB_CMC,:THUMB_MCP,:THUMB_IP,:THUMB_TIP,:INDEX_FINGER_MCP,:INDEX_FINGER_PIP,:INDEX_FINGER_DIP,:INDEX_FINGER_TIP,:MIDDLE_FINGER_MCP,:MIDDLE_FINGER_PIP,:MIDDLE_FINGER_DIP,:MIDDLE_FINGER_TIP,:RING_FINGER_MCP,:RING_FINGER_PIP,:RING_FINGER_DIP,:RING_FINGER_TIP,:PINKY_MCP,:PINKY_PIP,:PINKY_DIP,:PINKY_TIP,:score,:orentation_hands)", dictionary_result)
+    c.execute("INSERT INTO mp_result VALUES (:id_image,:orentation_hands,:score,:WRIST,:THUMB_CMC,:THUMB_MCP,:THUMB_IP,:THUMB_TIP,:INDEX_FINGER_MCP,:INDEX_FINGER_PIP,:INDEX_FINGER_DIP,:INDEX_FINGER_TIP,:MIDDLE_FINGER_MCP,:MIDDLE_FINGER_PIP,:MIDDLE_FINGER_DIP,:MIDDLE_FINGER_TIP,:RING_FINGER_MCP,:RING_FINGER_PIP,:RING_FINGER_DIP,:RING_FINGER_TIP,:PINKY_MCP,:PINKY_PIP,:PINKY_DIP,:PINKY_TIP,:image)", dictionary_result)
     conn.commit()
     conn.close()
 
