@@ -5,16 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta lang="spa">
     <title>SemillIAS Sings</title>
+    <link rel="stylesheet" href="{{url_for('static', path='/ccs/styles.css')}}">
 </head>
 <body>
     <header>
         <h1 id="Title_main">  {{title}}  </h1>
-        <ul>
-            <li> Adqusición de nuevas imagenes </li>
-            <li> Prueba modelo lenguaje se señas </li>
-          </ul>
-        <img src="{{url_for('static', path='imgs/UR.jpg')}}" alt="Universidad del Rosario">
+        <div class= 'bar_home'>
+            <ul>
+                <li> Adqusición de nuevas imagenes </li>
+                <li> Prueba modelo lenguaje se señas </li>
+            </ul>        
+
+
+
+        </div>
     </header>
+    <img class="imghome" src="{{url_for('static', path='imgs/UR.jpg')}}" alt="Universidad del Rosario">
+    <ul>
+        <li> Adqusición de nuevas </li>
+        <li> Prueba modelo lenguaje se señas </li>
+    </ul>
     
 </body>
 </html>
