@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, File, UploadFile, Form, status
+from fastapi import FastAPI, Request, File, UploadFile, Form, status, WebSocket
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -7,6 +7,13 @@ from pathlib import Path
 import logging
 from starlette.datastructures import URL
 import pandas as pd
+import numpy as np
+from modules.backend.mediapipe import hands_detect
+
+
+import cv2
+import io
+import base64
 
 # Crete app
 app = FastAPI()
@@ -96,4 +103,41 @@ def database_resume(request:Request):
     header = True
     return templates.TemplateResponse("db_resume.html", {"request": request,"tables": tables, "titles": titles})
 
+
+@app.route("/semillIAS_sing/predict")
+def predict(request:Request):
+    return templates.TemplateResponse("predict.html", {"request": request})
+
+
+async def capture_video(websocket: WebSocket):
+    while True:
+        # Capturar un cuadro de video de la cámara web
+        data = await websocket.receive_text()
+        # Decodificar los datos de la imagen en base64
+        image_data = data.split(',')[1].encode()
+        nparr = np.fromstring(base64.b64decode(image_data), np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        
+        # Procesar el cuadro de video
+        flag, image_dw = hands_detect(img, plot=False)
+        image_dw = cv2.flip(image_dw, 1)
+        _, buffer = cv2.imencode('.jpg', image_dw)
+        processed_frame =  base64.b64encode(buffer).decode("ascii")
+
+        # Enviar el cuadro de video procesado a través del socket
+        await websocket.send_text(processed_frame)
+
+@app.websocket('/semillIAS_sing/predict/ws')
+async def websocket_endpoint(websocket: WebSocket):
+    # Abrir la conexión del socket
+    print('Ws conections...')
+    await websocket.accept()
+    try:
+        # Iniciar la captura de video desde la cámara web y enviar cada cuadro procesado a través del socket
+        await capture_video(websocket)
+    finally:
+        # Cerrar la conexión del socket cuando se cierra la conexión
+        await websocket.close()        
+        
+    
 

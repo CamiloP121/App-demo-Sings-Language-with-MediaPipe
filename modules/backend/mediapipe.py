@@ -85,6 +85,7 @@ def hands_detect(image:np.ndarray,plot:bool):
     image_dw = image.copy()
     image_dw = cv.flip(image_dw, 1)
     lb = 'No se detecta mano'
+    flag = False
     with mp_hands.Hands(
       static_image_mode=False,
       max_num_hands=1,
@@ -104,8 +105,6 @@ def hands_detect(image:np.ndarray,plot:bool):
         if flag:
             with open('modules/static/temp/mp_results.json', 'w') as f:
                 json.dump(dic_result, f, indent=2)
-            with open('test/mp_results.json', 'w') as f:
-                json.dump(dic_result, f, indent=2)
 
         # Draw hands
     
@@ -117,7 +116,9 @@ def hands_detect(image:np.ndarray,plot:bool):
         if plot:
             plot_image(image_dw, name_window='Result MediaPipe')
         
-    print(lb)
+    # print(lb)
+
+    return flag, image_dw
 
 
     

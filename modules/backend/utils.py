@@ -61,5 +61,16 @@ def imageBase64():
 
     return img_data
 
+def live_video(cap):
+    while True:
+        ret, frame = cap.read()
+        if ret:
+            _, ima_draw = hands_detect(frame)
+            flag, encodedImage = cv.imencode(".jpg", ima_draw)
+            if not flag:
+                continue
+            yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' +
+                    bytearray(encodedImage) + b'\r\n')
+
 if __name__ == '__main__':
     pass    

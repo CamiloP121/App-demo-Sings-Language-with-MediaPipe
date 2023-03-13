@@ -1,0 +1,82 @@
+.bar_home {
+    height: 200px; 
+    }
+
+img.imghome {
+    height: 100px;
+    width: 200px;
+    }
+
+.demo_images {
+    height: 150px;
+    width: 600px;
+}
+
+#ur {
+    margin-left: 1%;
+    margin-right: 3%;
+    float: right;   
+}
+
+#semillero {
+    margin-right: 1%;
+    margin-left: 3%;
+    float: left;   
+}
+
+#Title_main {
+    text-align: center;
+}
+
+#Intro {
+    text-align: center;
+}
+
+#Adq_images {
+    height: 300px;
+    border-top: solid;
+}
+
+#predict_images {
+    height: 300px;
+    border-top: solid;
+    border-bottom: solid;
+}
+
+#About_us {
+    column-count: 4;
+}
+
+.perosnal {
+    height: 400px;
+}
+
+.linkedin {
+    width:45px;
+    height:50px;
+    float: center;
+
+}
+
+.button {
+    background-color: #008CBA; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-family: 'Bitter', serif;
+}
+
+p {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 24px;
+}
+
+h1, h2 {
+    font-family: 'Bitter', serif; 
+}

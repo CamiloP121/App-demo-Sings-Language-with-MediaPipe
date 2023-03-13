@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enviar video en tiempo real por socket en HTML</title>
+</head>
+<body>
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas hidden id="canvas" width="640" height="480"></canvas>
+    <canvas id="canvas2" width="640" height="480" style="border: dashed;"></canvas>
+
+    <script>
+        let video = document.querySelector("#video");
+        let canvas = document.querySelector("#canvas");
+        let context = canvas.getContext("2d");
+
+        let canvas_return = document.querySelector("#canvas2");
+        let context_return = canvas2.getContext("2d");
+
+        let socket = new WebSocket("ws://localhost:8000/semillIAS_sing/predict/ws");
+
+        socket.onopen = function() {
+            console.log("Conexión abierta");
+        };
+
+        socket.onmessage = function(event) {
+            let image = new Image();
+            image.onload = function() {
+                console.log("Entra");
+                context_return.drawImage(image, 0, 0);
+            };
+            image.src = "data:image/jpeg;base64," + event.data;
+        };
+
+        socket.onclose = function() {
+            console.log("Conexión cerrada");
+        };
+
+        navigator.mediaDevices.getUserMedia({video: true})
+        .then(mediaStream => {
+            video.srcObject = mediaStream;
+            setInterval(function() {
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                let imageData = canvas.toDataURL("image/jpeg", 0.5);
+                socket.send(imageData);
+            }, 120);
+        })
+        .catch(err => console.error(err));
+    </script>
+</body>
+</html>
