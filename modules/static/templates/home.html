@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta lang="spa">
     <title>SemillIAS Sings</title>
-    <link rel="stylesheet" href="{{url_for('static', path='/ccs/styles_home2.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', path='/ccs/styles_home5.css')}}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bitter&family=Source+Sans+Pro:wght@300&display=swap" rel="stylesheet">
@@ -15,59 +15,69 @@
     <header>
         <div class= 'bar_home'>
             <h1 id="Title_main">  {{title}}  </h1>
-            <img class="imghome" id = "ur" src="{{url_for('static', path='imgs/UR.jpg')}}" alt="Universidad del Rosario">
-            <img class="imghome" id = "semillero" src="{{url_for('static', path='imgs/semillero.jpg')}}" alt="SemillIAS">
-            <p id ='Intro' > El proyecto de Alfabeto de señas para el lenguaje Colombiano esta propuesto por una de las ramas del grupo de investigacion Semill- IAS de la Universidad del Rosario.... Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam modi quas reiciendis illum id animi aperiam nulla odit cumque natus a fugiat veritatis labore ut doloremque ullam, at doloribus cum?</p>
+            <img class="imghome" id = "ur" src="{{url_for('static', path='imgs/UR.jpg')}}" style="height: 120px; width: 210px;" alt="Universidad del Rosario">
+            <img class="imghome" id = "semillero" src="{{url_for('static', path='imgs/semillero2.jpg')}}" alt="SemillIAS">
+            <p id ='Intro' >El proyecto de Lenguaje de señas de Colombiano esta propuesto por una de las ramas del grupo de investigacion Semill- IAS de la Universidad del Rosario que busca apoyar a las personas el desarrollo y educación a personas con discapacidad auditiva. Se busca darle una herramienta de bajo costo y fácil uso. ¡Ayúdanos a probarla y mejorarla! </p>
         </div>
     </header>
-    
-    <!--  Cuerpo dos partes del demo  -->
-    <div id="Adq_images">
-        <h1 class = "title_sections"> Adqusición de nuevas imagenes</h1>
-        <img class="demo_images" id = "ur" src="{{url_for('static', path='imgs/upload_example.png')}}" alt="#">
-        <p class="text_describe"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam, ullam! Iste mollitia, nobis et eaque voluptatum doloremque illum esse vitae omnis quibusdam aperiam, voluptates quae numquam iusto officiis id odit.</p>
-        <a href="{{url_for('upload_images')}}" class="button"> Tomar imagen </a>
-    </div>
+    <div class="cont" style="margin-right: 3%; margin-left: 3%;">
+        <!--  Cuerpo dos partes del demo  -->
+        <div id="Adq_images">
+            <h1 class = "title_sections"> Adqusición de nuevas imagenes</h1>
+            <img class="demo_images" id = "ur" src="{{url_for('static', path='imgs/upload_example.png')}}" alt="#">
+            <p class="text_describe"> ¡Ayúdanos a mejorar la vida de las personas que posean algún nivel de discapacidad auditiva colaborando en la recolección de imágenes para nuestro proyecto de lenguaje de señas! Obtén más información en nuestra sección de  <strong> recolección de imágenes. </strong> ¡Gracias por tu colaboración!</p>
+            <a href="{{url_for('upload_images')}}" class="button"> RECOLECCIÓN DE IMÁGENES </a>
+        </div>
 
 
-    <div id="predict_images">
-        <h1 class = "title_sections" style="text-align: right;"> Prueba predicción alfabeto de lenguajes de señas </h1>
-        <img class="demo_images" id = "semillero" src="{{url_for('static', path='imgs/predcit_example.png')}}" alt="#">
-        <p class="text_describe"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam, ullam! Iste mollitia, nobis et eaque voluptatum doloremque illum esse vitae omnis quibusdam aperiam, voluptates quae numquam iusto officiis id odit.</p>
-        <a href="{{url_for('predict')}}" class="button"> Predicción </a>
+        <div id="predict_images">
+            <h1 class = "title_sections" style="text-align: right; margin-right: 6%;"> Predicción alfabeto de lenguajes de señas </h1>
+            <img class="demo_images" id = "semillero" src="{{url_for('static', path='imgs/predcit_example.png')}}" alt="#">
+            <p class="text_describe"> En esta sección podrás probar ¡el modelo de detección del alfabeto de lenguaje de señales Colombiano! Nota: Ten en cuenta que la predicción puede no ser exacta, pero trabajamos continuamente para mejorarlo.</p>
+            <a href="{{url_for('predict')}}" class="button"> PRUEBA EL MODELO DE IA </a>    
+        </div>
         
 
+        <div style="height: 50px;">
+            <h1 style="text-align: center;"> Acerca de nosotros </h1>
+        </div>
+
+
+        <div id="paper">
+            <h1 class = "title_sections"> Menciones</h1>
+            <p class="text_describe"> Nuestro grupo de investigación ha tenido una destacada participación en la conferencia internacional SmartTech IC, celebrada en Cuenca, Ecuador. Obtuvimos el premio al mejor artículo en Aprendizaje Electrónico y de Sesión Informática. Si deseas conocer más detalles sobre nuestra investigación, te invitamos a que visites el siguiente enlace. ¡Gracias por su apoyo!</p>
+        </div>
         
-    </div>
-    <div style="height: 100px;">
-        <h1 style="text-align: center;"> Acerca de nosotros </h1>
-    </div>
-    <div id = "About_us">
-        
-        <div class="perosnal" id ="p1">
-            <h2 class="title_personal"> Persona 1</h2>
-            <p class="describe_personal"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae nulla assumenda magni odio laboriosam eos. Quo quia dolorem deserunt assumenda excepturi, facere molestias non dolorum nihil? Explicabo, magnam! Repellendus, dolores?</p>
-            <a href="https://pure.urosario.edu.co/es/organisations/research-incubator-artificial-intelligence-in-health-semillias" class ="linkedin"><img src="{{url_for('static', path='imgs/icons8-linkedin.svg')}}" alt="#"></a>
+        <div style="height: 100px;">
+            <h1> Contactanos </h1>
         </div>
 
-        <div class="perosnal" id ="p2">
-            <h2 class="title_personal"> Persona 2</h2>
-            <p class="describe_personal"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae nulla assumenda magni odio laboriosam eos. Quo quia dolorem deserunt assumenda excepturi, facere molestias non dolorum nihil? Explicabo, magnam! Repellendus, dolores?</p>
-            <a href="https://pure.urosario.edu.co/es/organisations/research-incubator-artificial-intelligence-in-health-semillias" class ="linkedin"><img src="{{url_for('static', path='imgs/icons8-linkedin.svg')}}" alt="#"></a>
-        </div>
+        <div id = "About_us">
 
-        <div class="perosnal" id ="p3">
-            <h2 class="title_personal"> Persona 3 </h2>
-            <p class="describe_personal"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae nulla assumenda magni odio laboriosam eos. Quo quia dolorem deserunt assumenda excepturi, facere molestias non dolorum nihil? Explicabo, magnam! Repellendus, dolores?</p>
-            <a href="https://pure.urosario.edu.co/es/organisations/research-incubator-artificial-intelligence-in-health-semillias" class ="linkedin"><img src="{{url_for('static', path='imgs/icons8-linkedin.svg')}}" alt="#"></a>
-        </div>
+            <div class="perosnal" id ="p1">
+                <h2 class="title_personal"> Alvaro David Orjuela-Cañón </h2>
+                <p class="describe_personal"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae nulla assumenda magni odio laboriosam eos. Quo quia dolorem deserunt assumenda excepturi, facere molestias non dolorum nihil? Explicabo, magnam! Repellendus, dolores?</p>
+                <a href="https://www.linkedin.com/in/alvaro-david-orjuela-ca%C3%B1%C3%B3n/" class ="linkedin"><img src="{{url_for('static', path='imgs/icons8-linkedin.svg')}}" alt="#"></a>
+            </div>
 
-        <div class="perosnal" id ="p4">
-            <h2 class="title_personal"> Persona 4 </h2>
-            <p class="describe_personal"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae nulla assumenda magni odio laboriosam eos. Quo quia dolorem deserunt assumenda excepturi, facere molestias non dolorum nihil? Explicabo, magnam! Repellendus, dolores?</p>
-            <a href="https://pure.urosario.edu.co/es/organisations/research-incubator-artificial-intelligence-in-health-semillias" class ="linkedin"><img src="{{url_for('static', path='imgs/icons8-linkedin.svg')}}" alt="#"></a>
+            <div class="perosnal" id ="p2">
+                <h2 class="title_personal"> Anny </h2>
+                <p class="describe_personal"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae nulla assumenda magni odio laboriosam eos. Quo quia dolorem deserunt assumenda excepturi, facere molestias non dolorum nihil? Explicabo, magnam! Repellendus, dolores?</p>
+                <a href="https://pure.urosario.edu.co/es/organisations/research-incubator-artificial-intelligence-in-health-semillias" class ="linkedin"><img src="{{url_for('static', path='imgs/icons8-linkedin.svg')}}" alt="#"></a>
+            </div>
+
+            <div class="perosnal" id ="p3">
+                <h2 class="title_personal"> Juan Jose Sanchez Correa </h2>
+                <p class="describe_personal"> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae nulla assumenda magni odio laboriosam eos. Quo quia dolorem deserunt assumenda excepturi, facere molestias non dolorum nihil? Explicabo, magnam! Repellendus, dolores?</p>
+                <a href="https://www.linkedin.com/in/juan-jose-sanchez-correa-238753210/" class ="linkedin"><img src="{{url_for('static', path='imgs/icons8-linkedin.svg')}}" alt="#"></a>
+            </div>
+
+            <div class="perosnal" id ="p4">
+                <h2 class="title_personal"> Camilo Pérez Ospino </h2>
+                <p class="describe_personal"> Ingenierio Biomedico Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis iste deserunt dolore numquam laboriosam nesciunt quaerat excepturi beatae consequuntur sequi odio quis ab cumque, facilis odit. Eaque fuga molestiae accusantium! </p>
+                <a href="https://www.linkedin.com/in/camilo-andr%C3%A9s-p%C3%A9rez-ospino-8b995722a" class ="linkedin"><img src="{{url_for('static', path='imgs/icons8-linkedin.svg')}}" alt="#"></a>
+            </div>
         </div>
     </div>
-    
 </body>
 </html>

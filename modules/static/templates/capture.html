@@ -16,8 +16,8 @@
         <div class= 'bar_home'>
             <h1 id="Title_main">  {{title}}  </h1>
             <img class="imghome" id = "ur" src="{{url_for('static', path='imgs/UR.jpg')}}" alt="Universidad del Rosario">
-            <img class="imghome" id = "semillero" src="{{url_for('static', path='imgs/semillero.jpg')}}" alt="SemillIAS">
-            <p id ='Intro' > Modulo de Adqusición de nuevas imagenes para re-entrenamiento de nuestro modelo</p>
+            <img class="imghome" id = "semillero" src="{{url_for('static', path='imgs/semillero2.jpg')}}" alt="SemillIAS">
+            <p id ='Intro' > Módulo de Adquisición de nuevas imagenes para re-entrenamiento de nuestro modelo</p>
         </div>
     </header>
     
@@ -30,9 +30,9 @@
     
     <div id = 'container_video' style="float: center; border-style: dashed; text-align:center; margin-left: 20%; margin-right: 20%;">
         <div class="video-wrap">
-            <h1 style="text-align: center;"> ------- Camara ------- </h1>
+            <h1 style="text-align: center;"> ------- Cámara ------- </h1>
             <video class="cont_image" id="video" width="640" height="480" autoplay></video>
-            <p style="text-align: center;">Por favor centra tu mano en la imagen y oprime el boton de "captura"</p>
+            <p style="text-align: center;">Por favor centra tu mano en la imagen y oprime el boton de <strong> "Captura" </strong></p>
         </div>
         <!— Button -->
         <div class="controller">
@@ -88,7 +88,7 @@ init();
 // Dibuja la imagen
 var context = canvas.getContext('2d');
     snap.addEventListener("click", function() {
-        parrafoTexto.textContent = 'Si concideras que la imagen esta correcta, dale ahora al boton "Enviar"';
+        parrafoTexto.textContent = 'Si consideras que la imagen esta correcta, dale ahora al boton "Enviar"';
         context.drawImage(video, 0, 0, 640, 480);
         const dataURL = canvas.toDataURL();
         document.getElementById("url_image").setAttribute('value', dataURL);

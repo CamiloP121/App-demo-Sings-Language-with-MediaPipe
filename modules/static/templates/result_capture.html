@@ -16,7 +16,7 @@
         <div class= 'bar_home'>
             <h1 id="Title_main">  {{title}}  </h1>
             <img class="imghome" id = "ur" src="{{url_for('static', path='imgs/UR.jpg')}}" alt="Universidad del Rosario">
-            <img class="imghome" id = "semillero" src="{{url_for('static', path='imgs/semillero.jpg')}}" alt="SemillIAS">
+            <img class="imghome" id = "semillero" src="{{url_for('static', path='imgs/semillero2.jpg')}}" alt="SemillIAS">
         </div>
     </header>
 
@@ -61,7 +61,7 @@
     function check() {
     if(document.getElementById('No').checked) {
         console.log('Check')
-        if (confirm("No se detecto correctamnete la mano. Volveremos a la pagina de toma la foto. ¿Desea continuar?") == true) {
+        if (confirm("No se detecto correctamente la mano. Volveremos a la página de toma la foto. ¿Desea continuar?") == true) {
         document.getElementById("ColorChanger").style.backgroundColor = "green";
         } else {
             document.getElementById("ColorChanger").style.backgroundColor = "#C0C0C0";

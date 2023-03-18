@@ -39,13 +39,13 @@ templates = Jinja2Templates(directory="modules/static/templates")
 # Home page
 @app.get("/semillIAS_sing/home")
 def home(request: Request):
-    title = 'Demo app: Signs'
+    title = '¡Lenguaje de señas para todos!'
     return templates.TemplateResponse("home.html",{"request": request, "title": title})
 
 # Page capture image
 @app.get("/semillIAS_sing/upload_images")
 def upload_images(request: Request):
-    title = 'Demo app: Adquesición de nuevas imagenes'
+    title = 'Adquisición de nuevas imagenes'
     return templates.TemplateResponse("capture.html", {"request": request, 'title':title})
 
 @app.post("/semillIAS_sing/upload_images")
@@ -58,13 +58,13 @@ async def upload_images(request: Request, url_image: str = Form(...)):
         redirect_url = URL(request.url_for('result')).include_query_params(msg="complete extraction")
         return RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)
     else: 
-        capture = '**Error** \nNo se encontro mano!'
+        capture = '**Error** ¡No se encontró mano! Vuelve a intentarlo'
         return templates.TemplateResponse("capture.html", {"request": request, "message": capture})
 
 @app.get('/semillIAS_sing/result')
 async def result(request: Request):
     results = utils.load_mp_results()
-    title = 'Demo app: Resultado de adqusición'
+    title = 'Resultado de adqusición'
     return templates.TemplateResponse("result_capture.html", {"request": request,'title':title , "orientation": results['orentation_hands'],
                                         "score": str(round(float(results['score'])*100,3))})
 
@@ -77,13 +77,13 @@ async def result(request: Request, h_hand:str = Form(...)):
             image_b64 = utils.imageBase64()
             results['image'] = image_b64
             db.insert_db(results)
-            title = 'Demo app: Resultado de adqusición'
+            title = 'Resultado de adquisición'
             return templates.TemplateResponse("result_capture.html", {"request": request, 'title':title ,"orientation": results['orentation_hands'],
-                                        "score": str(round(float(results['score'])*100,3)), "message": 'La imagen sera cargada. !Muchas gracias por participar!'})
+                                        "score": str(round(float(results['score'])*100,3)), "message": 'La imagen será cargada. !Muchas gracias por participar!'})
         
         except Exception as e:
             print(e)
-            title = 'Demo app: Resultado de adqusición (Error)'
+            title = 'Resultado de adquisición (Error)'
             return templates.TemplateResponse("result_capture.html", {"request": request,'title':title, "orientation": results['orentation_hands'],
                                         "score": str(round(float(results['score'])*100,3)), "message_raise": 'Error en la carga de datos, intentelo de nuevo'})
     elif h_hand == 'No':
@@ -91,7 +91,7 @@ async def result(request: Request, h_hand:str = Form(...)):
         redirect_url = URL(request.url_for('upload_images'))
         return RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)
     else:
-        title = 'Demo app: Resultado de adqusición'
+        title = 'Resultado de adqusición'
         return templates.TemplateResponse("result_capture.html", {"request": request,'title':title ,"orientation": results['orentation_hands'],
                                         "score": str(round(float(results['score'])*100,3))})
 
@@ -107,7 +107,7 @@ def database_resume(request:Request):
 
 @app.route("/semillIAS_sing/predict")
 def predict(request:Request):
-    title = 'Demo app: Predicción alfabeto de Señas'
+    title = 'Predicción alfabeto de Señas'
     return templates.TemplateResponse("predict.html", {"request": request, 'title':title})
 
 
