@@ -1,12 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="spa">
 <head>
-    <title>Enviar video en tiempo real por socket en HTML</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>capture image</title>
+    <link rel="stylesheet" href="{{url_for('static', path='/ccs/styles_home3.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bitter&family=Source+Sans+Pro:wght@300&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <video id="video" width="640" height="480" autoplay></video>
-    <canvas hidden id="canvas" width="640" height="480"></canvas>
-    <canvas id="canvas2" width="640" height="480" style="border: dashed;"></canvas>
+    <header>
+        <div class= 'bar_home'>
+            <h1 id="Title_main">  {{title}}  </h1>
+            <img class="imghome" id = "ur" src="{{url_for('static', path='imgs/UR.jpg')}}" alt="Universidad del Rosario">
+            <img class="imghome" id = "semillero" src="{{url_for('static', path='imgs/semillero.jpg')}}" alt="SemillIAS">
+            <p id ='Intro' > Modulo de predicción del alfabeto de señas Colombiano desarollado por Semill-IAS</p>
+        </div>
+    </header>
+    <div class="contenedor"  style="float: center; border-style: dashed; text-align:center;">
+        <div class="columna">
+            <h1 style="text-align: center;"> --- Imagen capturada --- </h1>
+            <video id="video" width="640" height="480" autoplay></video>
+            <canvas hidden id="canvas" width="640" height="480"></canvas>
+        </div>>
+        <div class="columna">
+            <h1 style="text-align: center;"> --- Imagen procesada --- </h1>
+            <canvas id="canvas2" width="640" height="480" style="border: solid;"></canvas>
+        </div>
 
     <script>
         let video = document.querySelector("#video");

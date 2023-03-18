@@ -9,8 +9,6 @@ from starlette.datastructures import URL
 import pandas as pd
 import numpy as np
 from modules.backend.mediapipe import hands_detect
-
-
 import cv2
 import io
 import base64
@@ -47,7 +45,8 @@ def home(request: Request):
 # Page capture image
 @app.get("/semillIAS_sing/upload_images")
 def upload_images(request: Request):
-    return templates.TemplateResponse("capture.html", {"request": request})
+    title = 'Demo app: Adquesición de nuevas imagenes'
+    return templates.TemplateResponse("capture.html", {"request": request, 'title':title})
 
 @app.post("/semillIAS_sing/upload_images")
 async def upload_images(request: Request, url_image: str = Form(...)):
@@ -65,8 +64,9 @@ async def upload_images(request: Request, url_image: str = Form(...)):
 @app.get('/semillIAS_sing/result')
 async def result(request: Request):
     results = utils.load_mp_results()
-    return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
-                                        "score": str(round(results['score'],3)*100)})
+    title = 'Demo app: Resultado de adqusición'
+    return templates.TemplateResponse("result_capture.html", {"request": request,'title':title , "orientation": results['orentation_hands'],
+                                        "score": str(round(float(results['score'])*100,3))})
 
 
 @app.post('/semillIAS_sing/result')
@@ -76,23 +76,24 @@ async def result(request: Request, h_hand:str = Form(...)):
         try:
             image_b64 = utils.imageBase64()
             results['image'] = image_b64
-            
             db.insert_db(results)
-            
-            print(results['score'],type(results['score']))
-            return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
-                                        "score": str(round(float(results['score']),3)*100), "message": 'La imagen sera cargada. !Muchas gracias por participar!'})
+            title = 'Demo app: Resultado de adqusición'
+            return templates.TemplateResponse("result_capture.html", {"request": request, 'title':title ,"orientation": results['orentation_hands'],
+                                        "score": str(round(float(results['score'])*100,3)), "message": 'La imagen sera cargada. !Muchas gracias por participar!'})
         
-        except Exception:
-            return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
-                                        "score": str(round(results['score'],3)*100), "message_raise": 'Error en la carga de datos, intentelo de nuevo'})
+        except Exception as e:
+            print(e)
+            title = 'Demo app: Resultado de adqusición (Error)'
+            return templates.TemplateResponse("result_capture.html", {"request": request,'title':title, "orientation": results['orentation_hands'],
+                                        "score": str(round(float(results['score'])*100,3)), "message_raise": 'Error en la carga de datos, intentelo de nuevo'})
     elif h_hand == 'No':
         print('Return to upload image')
         redirect_url = URL(request.url_for('upload_images'))
         return RedirectResponse(redirect_url, status_code=status.HTTP_303_SEE_OTHER)
     else:
-        return templates.TemplateResponse("result_capture.html", {"request": request, "orientation": results['orentation_hands'],
-                                        "score": str(round(float(results['score']),3)*100)})
+        title = 'Demo app: Resultado de adqusición'
+        return templates.TemplateResponse("result_capture.html", {"request": request,'title':title ,"orientation": results['orentation_hands'],
+                                        "score": str(round(float(results['score'])*100,3))})
 
 @app.route("/semillIAS_sing/database_resume")
 def database_resume(request:Request):
@@ -106,10 +107,19 @@ def database_resume(request:Request):
 
 @app.route("/semillIAS_sing/predict")
 def predict(request:Request):
-    return templates.TemplateResponse("predict.html", {"request": request})
+    title = 'Demo app: Predicción alfabeto de Señas'
+    return templates.TemplateResponse("predict.html", {"request": request, 'title':title})
 
 
 async def capture_video(websocket: WebSocket):
+    '''
+    Captures video and processes it Mediapipe
+    ----------------------------------------------------------------
+    Args:
+    Websocket: WebSocket (Video text)
+    Returns:
+    Video procesed
+    '''
     while True:
         # Capturar un cuadro de video de la cámara web
         data = await websocket.receive_text()

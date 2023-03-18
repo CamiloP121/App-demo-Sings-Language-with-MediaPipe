@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static', path='/ccs/styles.css')}}">
-    <title>Result detect hand</title>
+    <title>capture image</title>
+    <link rel="stylesheet" href="{{url_for('static', path='/ccs/styles_home3.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bitter&family=Source+Sans+Pro:wght@300&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <header> 
-        <h1> Resultado detector de manos </h1>
-        
+    <header>
+        <div class= 'bar_home'>
+            <h1 id="Title_main">  {{title}}  </h1>
+            <img class="imghome" id = "ur" src="{{url_for('static', path='imgs/UR.jpg')}}" alt="Universidad del Rosario">
+            <img class="imghome" id = "semillero" src="{{url_for('static', path='imgs/semillero.jpg')}}" alt="SemillIAS">
+        </div>
     </header>
 
     {% if message_raise %}
@@ -19,31 +26,34 @@
         {{message_raise}}
     </div>
     {% endif %}
-
-    <div class="img_ori">
-        <h2> Imagen original: </h2>
-        <!— Draw image -->
-        <img src="{{url_for('static', path='temp/image.jpg')}}" alt="Original" width="640" height="480">
-    </div>
-    <div class="img_result">
-        <h2> Imagen resultado -> score: {{ score }} %: </h2>
-        <!— Draw image -->
-        <img src="{{url_for('static', path='temp/image_mp.jpg')}}" alt="Resultado MediaPipe" width="640" height="480">
-    </div>
-    {% if message %}
-        <div class="Success">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-            {{message}}
+    <div id = 'container_video' style="float: center; border-style: dashed; text-align:center;">
+        <div class="contenedor">
+            <div class="columna">
+                <h1 style="text-align: center;"> ---- Imagen original ---- </h1>
+                <!— Draw image -->
+                <img src="{{url_for('static', path='temp/image.jpg')}}" alt="Original" width="640" height="480">
+            </div>
+            <div class="columna">
+                <h1 style="text-align: center;"> Imagen resultado -> score: {{ score }} %: </h2>
+                <!— Draw image -->
+                <img src="{{url_for('static', path='temp/image_mp.jpg')}}" alt="Resultado MediaPipe" width="640" height="480">
+            </div>
         </div>
-    {% else %}
-        <div class="check">
-            <form method="post">
-                <p> ¿Su mano es la {{orientation}}? </p>
-                <input type="radio" id="Si" name="h_hand" value="Si"> <label> Si </label><br>
-                <input type="radio" id="No" name="h_hand" value="No"> <label> No </label><br>
-                <input type="submit" onclick="check()">
-            </form>
-        </div>
+        {% if message %}
+            <div class="Success">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                {{message}}
+            </div>
+        {% else %}
+            <div class="check">
+                <form method="post">
+                    <p> ¿Su mano es la {{orientation}}? </p>
+                    <input type="radio" id="Si" class="h_hand" name="h_hand" value="Si"> <label> Si </label><br>
+                    <input type="radio" id="No" class="h_hand" name="h_hand" value="No"> <label> No </label><br>
+                    <input class="button" type="submit" onclick="check()">
+                </form>
+            </div>
+    </div>
     {% endif %}
 
 

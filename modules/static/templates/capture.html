@@ -5,13 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>capture image</title>
-    <link rel="stylesheet" href="{{url_for('static', path='/ccs/styles.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', path='/ccs/styles_home3.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bitter&family=Source+Sans+Pro:wght@300&display=swap" rel="stylesheet">
 
 </head>
 <body>
-    <header> 
-        <h1> Pestaña de Adqusición de imagen de la mano </h1>
-        <h2>Camara: </h2>
+    <header>
+        <div class= 'bar_home'>
+            <h1 id="Title_main">  {{title}}  </h1>
+            <img class="imghome" id = "ur" src="{{url_for('static', path='imgs/UR.jpg')}}" alt="Universidad del Rosario">
+            <img class="imghome" id = "semillero" src="{{url_for('static', path='imgs/semillero.jpg')}}" alt="SemillIAS">
+            <p id ='Intro' > Modulo de Adqusición de nuevas imagenes para re-entrenamiento de nuestro modelo</p>
+        </div>
     </header>
     
     {% if message %}
@@ -20,21 +27,27 @@
             {{message}}
         </div>
     {% endif %}
-        
-    <div class="video-wrap">
-        <video id="video" width="640" height="480" autoplay></video>
-    </div>
-    <!— Button -->
-    <div class="controller">
-        <button id="snap">Captura</button>
-    </div>
-    <!— Draw image -->
-    <canvas id="canvas" width="640" height="480"></canvas> 
-    <form method="post">
-        <input type="hidden" file id="url_image" name="url_image" value="Defecto"/>     
-        <input type="submit" onclick="confirmFunction()">
-    </form>
     
+    <div id = 'container_video' style="float: center; border-style: dashed; text-align:center; margin-left: 20%; margin-right: 20%;">
+        <div class="video-wrap">
+            <h1 style="text-align: center;"> ------- Camara ------- </h1>
+            <video class="cont_image" id="video" width="640" height="480" autoplay></video>
+            <p style="text-align: center;">Por favor centra tu mano en la imagen y oprime el boton de "captura"</p>
+        </div>
+        <!— Button -->
+        <div class="controller">
+            <button class='button' id="snap" style="float: center;">Captura</button>
+        </div>
+        <!— Draw image -->
+        <div style="text-align:center;">
+            <canvas class="cont_image" id="canvas" width="640" height="480"></canvas> 
+            <p id="texto-p"></p>
+        </div>
+        <form method="post" style="text-align:center;">
+            <input type="hidden" file id="url_image" name="url_image" value="Defecto"/>
+            <input id = 'submit' class="button" type="submit" onclick="confirmFunction()">
+        </form>
+    </div>
 </body>
 
 <script>
@@ -43,6 +56,7 @@
 const video = document.getElementById('video');
 const snap = document.getElementById("snap");
 const canvas = document.getElementById('canvas');
+const parrafoTexto = document.getElementById("texto-p");
 const errorMsgElement = document.querySelector('span#errorMsg');
 
 const constraints = {
@@ -74,9 +88,10 @@ init();
 // Dibuja la imagen
 var context = canvas.getContext('2d');
     snap.addEventListener("click", function() {
-    context.drawImage(video, 0, 0, 640, 480);
-    const dataURL = canvas.toDataURL();
-    document.getElementById("url_image").setAttribute('value', dataURL);
+        parrafoTexto.textContent = 'Si concideras que la imagen esta correcta, dale ahora al boton "Enviar"';
+        context.drawImage(video, 0, 0, 640, 480);
+        const dataURL = canvas.toDataURL();
+        document.getElementById("url_image").setAttribute('value', dataURL);
     });
 
 function confirmFunction() {

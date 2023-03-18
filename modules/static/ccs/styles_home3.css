@@ -77,10 +77,49 @@ p {
     font-size: 24px;
 }
 
-h1, h2 {
+h1, h2, .h_hand {
     font-family: 'Bitter', serif; 
 }
 
-#cont_image {
+.cont_image {
     float: center;
 }
+
+
+.contenedor {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .columna {
+    flex: 1;
+    padding: 10px;
+  }
+
+
+  .alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+    }
+    
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+    }
+
+.Success {
+    padding: 20px;
+    background-color: #3c763d;
+    color: white;
+    }
