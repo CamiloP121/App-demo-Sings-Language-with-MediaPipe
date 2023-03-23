@@ -11,3 +11,8 @@ __pycahce__/
 logs/
 
 db/
+
+models/
+**/models
+
+*.pickle
