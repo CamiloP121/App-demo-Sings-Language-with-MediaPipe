@@ -5,4 +5,8 @@ temp/
 
 __pycahce__/
 
-*.pickle *.csv *.log *.db
+**/modules/models/**/*.pickle
+
+**/modules/db/**/*.db
+
+**/*.db
