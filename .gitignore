@@ -13,6 +13,3 @@ logs/
 db/
 
 models/
-**/models
-
-*.pickle
