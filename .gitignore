@@ -3,7 +3,7 @@
 test/
 temp/
 
-__pycahce__/
+__pycache__/
 
 **/modules/models/**/*.pickle
 
