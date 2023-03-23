@@ -3,15 +3,16 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from modules.backend import utils, db
+import asyncio
 from pathlib import Path
 import logging
 from starlette.datastructures import URL
-import pandas as pd
-import numpy as np
 from modules.backend.mediapipe import hands_detect
 import cv2
-import io
 import base64
+
+import warnings
+warnings.filterwarnings("ignore")
 
 # Crete app
 app = FastAPI()
@@ -126,13 +127,14 @@ async def capture_video(websocket: WebSocket):
         # Decodificar los datos de la imagen en base64
         img = utils.base64toimage(data.split(',')[1].encode(), save=False)
         # Procesar el cuadro de video
-        flag, image_dw = hands_detect(img, plot=False)
-        image_dw = cv2.flip(image_dw, 1)
-        _, buffer = cv2.imencode('.jpg', image_dw)
+        _ , img, _ = hands_detect(img, plot=False, on_predictions=True)
+        img = cv2.flip(img, 1)
+        _, buffer = cv2.imencode('.jpg', img)
         processed_frame =  base64.b64encode(buffer).decode("ascii")
 
         # Enviar el cuadro de video procesado a través del socket
         await websocket.send_text(processed_frame)
+
 
 @app.websocket('/semillIAS_sing/predict/ws')
 async def websocket_endpoint(websocket: WebSocket):

@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import mediapipe as mp
 import json
+import pickle
+
+
 def plot_image(image:np.ndarray,name_window:str):
     '''
     Plot image
@@ -20,11 +23,14 @@ def plot_image(image:np.ndarray,name_window:str):
 
 
 def trasnform_results(results:dict):
-   
-
-    lb = list(results.keys())
+    '''
+    Function to trasnform results with distance between points
+    Args:
+    results (dict): dictionary of results
+    returns:
+    points_transform (dict): dictionary of distances
+    '''
     data = list(results.values())
-    print(data[-2:])
 
     # Orden de distancias
     uni_pulgar = [0,1,2,3,4]
@@ -45,8 +51,9 @@ def trasnform_results(results:dict):
           points_transform[lbs[i]] = np.linalg.norm(np.array(data[index])-np.array(data[index_i]))
           i += 1
           index_i = index
-    print('----------------------------------------------------------------', i+1)
-    print(points_transform)
+    return points_transform
+
+
 def check_hands_points(x_points:float, y_points:float):
    ''' 
    Check all hands points exist and stay in the images. x_points and y_points < 1.0
@@ -88,7 +95,6 @@ def extract_hand_points(results:object):
     dic_results['score'] = round(hand_label.classification[0].score,4)
     dic_results['orentation_hands'] = or_hand
     
-    print('-> Complete extraction')
     return dic_results, True
 
     
@@ -120,6 +126,8 @@ def hands_detect(image:np.ndarray,plot:bool, on_predictions:bool=False):
     image_dw = cv.flip(image_dw, 1)
     lb = 'No se detecta mano'
     flag = False
+    dic_result = None
+
     with mp_hands.Hands(
       static_image_mode=False,
       max_num_hands=1,
@@ -137,13 +145,17 @@ def hands_detect(image:np.ndarray,plot:bool, on_predictions:bool=False):
 
         if flag:    
             # Transform results
-            trasnform_results(results=dic_result)
+            dic_distances = trasnform_results(results=dic_result)
             if on_predictions:
-               pass
+               image_dw = model_predict(dic_distances,dic_result,image)
+               return None, image_dw, None
             else: 
                 # Save results
                 with open('modules/static/temp/mp_results.json', 'w') as f:
                     json.dump(dic_result, f, indent=2)
+                with open('modules/static/temp/mp_distances.json', 'w') as f:
+                    json.dump(dic_distances, f, indent=2)
+        
 
         # Draw hands
         for hand_landmarks in results.multi_hand_landmarks:
@@ -155,10 +167,66 @@ def hands_detect(image:np.ndarray,plot:bool, on_predictions:bool=False):
             plot_image(image_dw, name_window='Result MediaPipe')
         
     # print(lb)
-
     return flag, image_dw, dic_result
 
+def model_predict(distances:dict, result:dict, image:np.ndarray):
+   '''
+   Function to apply model prediction in distances array and plot the results
+   Args:
+   distances: dictionary for distances array
+   result: dictionary for points array
+   image: np.ndarray to plot
+   Returns:
+   image: np.ndarray with predictons
+   '''
 
+   # Cargar modelo
+   model = pickle.load(open('modules/models/modelo_entrenado_RF.pickle', "rb"))
+   map_model = {'A': 0, 'B': 1,'C': 2,'D': 3,'E': 4,'F': 5,'G': 6,
+                           'H': 7,'I': 8,'J': 9,'K': 10,'L': 11,'M': 12,'N': 13,'Ñ': 14,
+                           'O': 15,'P': 16,'Q': 17,'R': 18,'S': 19,'T': 20,'U': 21,'V': 22,
+                           'W': 23,'X': 24,'Y': 25,'Z': 26}
+   
+    # Predicción
+   distances = [list(distances.values())]
+   try:
+        index = model.predict(distances)
+        letter = list(map_model.keys())[index[0]]
+   except Exception as e:
+       letter = ''
+    
+   # Draw result in image
+   image =cv.flip(image, 1)
+   h, w, _ = image.shape
+   index_dw = [0,17,13,9,5]
+   for cont,i in enumerate(index_dw):
+        x = int(list(result.values())[i][0] * w)
+        y = int(list(result.values())[i][1] * h)
+        cv.circle(image, (x, y), 3,(255,255,0), 3)
+        if cont == 0: 
+            star = [x,y] ; star_0 = [x,y]
+            cv.putText(image, letter, [star_0[0] + 10, star_0[1]+20], cv.FONT_HERSHEY_SIMPLEX, 2,(0,0,0), 4)
+
+        elif i == index_dw[-1]:
+            end = [x,y]
+            cv.line(image, end, star, (0, 0, 255), 4)
+            cv.line(image, end, star_0, (0, 0, 255), 4)
+        else:
+            end = [x,y]
+            cv.line(image, star, end, (0, 0, 255), 4)
+            star = end
+    
+   # plot_image(image=image, name_window='predict')
+   return image
+    
+
+
+      
+
+      
+    
+   
+   
     
 
 

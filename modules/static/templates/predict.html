@@ -65,7 +65,7 @@
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
                 let imageData = canvas.toDataURL("image/jpeg", 0.5);
                 socket.send(imageData);
-            }, 120);
+            }, 200);
         })
         .catch(err => console.error(err));
     </script>
