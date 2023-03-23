@@ -27,6 +27,14 @@ uvicorn app:app
 
 ```
 
+## How to use this application
+To access the main page of this project, you must follow the steps below:
+
+- Open web browser.
+- In the address bar, type localhost:8000/semillIAS_sing/home.
+- Press the Enter key.
+- That's it! You should now be on the project home page.
+
 ## Contributing
 
 If you wish to contribute to this project, you are welcome to fork it and make a pull request with your changes. You can also report any issues or errors you find using Github's "issues" feature.
