@@ -22,6 +22,7 @@ logging.info('Starting App')
 Path('temp').mkdir(parents=True, exist_ok=True)
 Path('logs').mkdir(parents=True, exist_ok=True)
 Path('modules/backend/db').mkdir(parents=True, exist_ok=True)
+Path('modules/backend/models').mkdir(parents=True, exist_ok=True)
 
 # Create database
 db.create_db()
