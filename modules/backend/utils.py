@@ -5,22 +5,24 @@ import cv2 as cv
 import os
 import json
 
-def base64toimage(img_data: str, save:bool = True):
+def base64toimage(image_data: str, save:bool = True):
     '''
     Converts base64 to image
     ----------------------------------------------------------------
     Arg:
     img_data (str): base64 string
     save (bool, optional): whether to save the image or not. Defaults to True.
+    Returns:
+    imagae (Opcional)
     '''
-    image_as_bytes = str.encode(img_data)  # convert string to bytes
-    image = base64.b64decode(image_as_bytes)
+    nparr = np.fromstring(base64.b64decode(image_data), np.uint8)
+    image = cv.imdecode(nparr, cv.IMREAD_COLOR)
     if save:
-        with open('modules/static/temp/image.jpg', 'wb') as file:
-            file.write(image)
+        cv.imwrite('modules/static/temp/image.jpg', image)
         with open('modules/static/temp/image.txt', 'w') as file:
-            file.write(img_data)
-
+            file.write(image_data)
+    else:
+        return image
 def mp_apply(plot:bool = True):
     '''
     Funcion use Mediapipe Google detected hands
@@ -31,7 +33,7 @@ def mp_apply(plot:bool = True):
     '''
     if os.path.exists('modules/static/temp/image.jpg'):
         image = cv.imread('modules/static/temp/image.jpg')
-        hands_detect(image, plot=plot)
+        hands_detect(image, plot=False)
         if not os.path.exists('modules/static/temp/mp_results.json'): return False
         else: return True
     else: 
@@ -49,7 +51,7 @@ def load_mp_results():
 
     return image_as_bytes
 
-def imageBase64():
+def loadBase64toImage():
     '''
     Load image base64
     ----------------------------------------------------------------
@@ -58,8 +60,9 @@ def imageBase64():
     '''
     with open('modules/static/temp/image.txt', 'r') as file:
         img_data = file.read()
+        Img = base64toimage(image_data= img_data, save=False)
 
-    return img_data
+    return Img
 
 def live_video(cap):
     while True:

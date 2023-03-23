@@ -18,6 +18,35 @@ def plot_image(image:np.ndarray,name_window:str):
     # and finally destroy/close all open windows
     cv.destroyAllWindows()
 
+
+def trasnform_results(results:dict):
+   
+
+    lb = list(results.keys())
+    data = list(results.values())
+    print(data[-2:])
+
+    # Orden de distancias
+    uni_pulgar = [0,1,2,3,4]
+    uni_inidce = [0,5,6,7,8]
+    uni_menique = [0,17,18,19,20]
+    uni_corazon = [9,10,11,12]
+    uni_anular = [13,14,15,16]
+    uni_nudillos = [5,9,13,17]
+    direcciones = [uni_pulgar,uni_inidce,uni_menique,uni_corazon,uni_anular,uni_nudillos]
+
+    # Nuevos labels
+    lbs = ['WT0','WT1','WT2','WT3','WI0','WI1','WI2','WI3','WP0','WP1','WP2','WP3','M0','M1','M2','R0','R1','R2','TI1','IM1','MP1']
+    i = 0
+    points_transform = {}
+    for uni in direcciones:
+       index_i = uni[0]
+       for index in uni[1:]:
+          points_transform[lbs[i]] = np.linalg.norm(np.array(data[index])-np.array(data[index_i]))
+          i += 1
+          index_i = index
+    print('----------------------------------------------------------------', i+1)
+    print(points_transform)
 def check_hands_points(x_points:float, y_points:float):
    ''' 
    Check all hands points exist and stay in the images. x_points and y_points < 1.0
@@ -55,6 +84,7 @@ def extract_hand_points(results:object):
 
     if hand_label.classification[0].label == 'Left': or_hand = 'Izquierda'
     else: or_hand = 'Derecha'
+
     dic_results['score'] = round(hand_label.classification[0].score,4)
     dic_results['orentation_hands'] = or_hand
     
@@ -62,15 +92,19 @@ def extract_hand_points(results:object):
     return dic_results, True
 
     
-def hands_detect(image:np.ndarray,plot:bool):
+def hands_detect(image:np.ndarray,plot:bool, on_predictions:bool=False):
     '''
     Detect hands in image
     ----------------------------------------------------------------
     Args:
     image (np.ndarray): image to detect hands in
     plot (bool): if True, plot the image
+    on_predictions (bool): if False save predictions, but if true pass to model prediction
+
     Returns:
     flag (bool): if True, detect hands in image
+    image_dr : image with points in hand
+    dic_results: dictionary with information of hand detection
     '''
     # Crate mp-hands model detection
     mp_drawing = mp.solutions.drawing_utils
@@ -98,16 +132,20 @@ def hands_detect(image:np.ndarray,plot:bool):
       results = hands.process(frame_rgb)
       if results.multi_hand_landmarks is not None:
         lb = 'Se detecto mano'
-
         # Extract results
         dic_result, flag = extract_hand_points(results)
-        # Save results
-        if flag:
-            with open('modules/static/temp/mp_results.json', 'w') as f:
-                json.dump(dic_result, f, indent=2)
+
+        if flag:    
+            # Transform results
+            trasnform_results(results=dic_result)
+            if on_predictions:
+               pass
+            else: 
+                # Save results
+                with open('modules/static/temp/mp_results.json', 'w') as f:
+                    json.dump(dic_result, f, indent=2)
 
         # Draw hands
-    
         for hand_landmarks in results.multi_hand_landmarks:
             mp_drawing.draw_landmarks(
                     image_dw, hand_landmarks, mp_hands.HAND_CONNECTIONS,mp_drawing.DrawingSpec(color=(255,255,0)))
@@ -118,7 +156,7 @@ def hands_detect(image:np.ndarray,plot:bool):
         
     # print(lb)
 
-    return flag, image_dw
+    return flag, image_dw, dic_result
 
 
     

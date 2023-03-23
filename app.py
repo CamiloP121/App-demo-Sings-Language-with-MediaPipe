@@ -124,10 +124,7 @@ async def capture_video(websocket: WebSocket):
         # Capturar un cuadro de video de la cámara web
         data = await websocket.receive_text()
         # Decodificar los datos de la imagen en base64
-        image_data = data.split(',')[1].encode()
-        nparr = np.fromstring(base64.b64decode(image_data), np.uint8)
-        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        
+        img = utils.base64toimage(data.split(',')[1].encode(), save=False)
         # Procesar el cuadro de video
         flag, image_dw = hands_detect(img, plot=False)
         image_dw = cv2.flip(image_dw, 1)
