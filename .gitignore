@@ -1,8 +1,8 @@
 # Ignore directories to github repositories
 
 test/
-
-
+models/*
+modules/*/models/
 temp/
 
 __pycahce__/
@@ -11,5 +11,3 @@ __pycahce__/
 logs/
 
 db/
-
-models/
