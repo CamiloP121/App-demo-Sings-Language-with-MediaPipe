@@ -1,12 +1,8 @@
 # Ignore directories to github repositories
 
 test/
-models/
 temp/
 
 __pycahce__/
-**__pycahce__/
 
-logs/
-
-db/
+*.pickle *.csv *.log *.db
