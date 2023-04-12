@@ -76,7 +76,7 @@ async def result(request: Request, h_hand:str = Form(...)):
     results = utils.load_mp_results()
     if h_hand == 'Si':
         try:
-            image_b64 = utils.imageBase64()
+            image_b64 = utils.loadBase64toImage()
             results['image'] = image_b64
             db.insert_db(results)
             title = 'Resultado de adquisición'
