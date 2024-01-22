@@ -6,13 +6,8 @@ This project is a demonstration application for the use of MediaPipe Hands and M
 
 To run this application, you will need to have the following installed:
 
-- Python 3.x
-- The libraries listed in the requirements.txt file
-To install the necessary libraries, you can use the following command in the command line:
-
-```bash
-pip install -r requirements.txt
-```
+- Python 3.11
+- The required libraries can be found in the file __ requirements.txt__, copy and install in Python or in a virtual environment
 
 ## Usage
 
