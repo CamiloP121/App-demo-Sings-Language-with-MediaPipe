@@ -21,8 +21,9 @@ logging.info('Starting App')
 # Create directorys necessary
 Path('temp').mkdir(parents=True, exist_ok=True)
 Path('logs').mkdir(parents=True, exist_ok=True)
-Path('modules/backend/db').mkdir(parents=True, exist_ok=True)
-Path('modules/backend/models').mkdir(parents=True, exist_ok=True)
+Path('modules/db').mkdir(parents=True, exist_ok=True)
+Path('modules/models').mkdir(parents=True, exist_ok=True)
+Path('modules/static/temp').mkdir(parents=True, exist_ok=True)
 
 # Create database
 db.create_db()
@@ -41,7 +42,7 @@ templates = Jinja2Templates(directory="modules/static/templates")
 # Home page
 @app.get("/semillIAS_sing/home")
 def home(request: Request):
-    title = '¡Lenguaje de señas para todos!'
+    title = '¡Lengua de señas para todos!'
     return templates.TemplateResponse("home.html",{"request": request, "title": title})
 
 # Page capture image
@@ -147,7 +148,6 @@ async def websocket_endpoint(websocket: WebSocket):
         await capture_video(websocket)
     finally:
         # Cerrar la conexión del socket cuando se cierra la conexión
-        await websocket.close()        
-        
+        await websocket.close()       
     
 
